@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
-@Controller('recados')
+@Controller('recados') // Decorator de controle
 export class RecadosController {
     // Encontra todos os recados
     @Get('/')
@@ -10,7 +10,8 @@ export class RecadosController {
 
     // Encontra um recado
     @Get(':id') //estrutura (:nomedoparametroquequeremos)
-    findOne() {
-        return 'Essa roda retorna UM recado';
+    findOne(@Param('id') id: string) { // O decorator Param nos permite pegar determinados parametros da url
+        console.log(id);
+        return `Essa roda retorna UM recado ID ${id}`; // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
     }
 }
