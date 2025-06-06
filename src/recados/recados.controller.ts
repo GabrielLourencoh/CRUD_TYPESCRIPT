@@ -1,4 +1,4 @@
-import { Body, Patch, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Patch, Delete, Controller, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 
 //CRUD
 // Create -> POST -> Criar um recado
@@ -22,7 +22,6 @@ export class RecadosController {
     // Encontra um recado
     @Get(':id') //estrutura (:nomedoparametroquequeremos)
     findOne(@Param('id') id: string) { // O decorator Param nos permite pegar determinados parametros da url
-        console.log(id);
         return `Essa roda retorna UM recado ID ${id}`; // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
     }
 
@@ -37,5 +36,10 @@ export class RecadosController {
             id, 
             ...body
         }
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) { 
+        return `Essa roda apaga o recado ID ${id}`;
     }
 }

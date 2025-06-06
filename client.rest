@@ -24,3 +24,6 @@ Content-Type: application/json
     "recado": "Este é o recado que estou enviando",
     "atualizar": true
 }
+
+### Apaga um recado 
+DELETE {{baseUrl}}/recados/1
