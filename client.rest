@@ -8,7 +8,7 @@ GET {{baseUrl}}/recados/
 
 ### Lista apenas um recado
 
-GET {{baseUrl}}/recados/4/
+GET {{baseUrl}}/recados/2/
 ### Cria um recado
 
 POST {{baseUrl}}/recados/

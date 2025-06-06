@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Recado } from './entities/recado.entity';
 
 @Injectable()
@@ -19,12 +19,28 @@ export class RecadosService {
     },
   ];
 
+  throwNotFoundError() {
+    throw new NotFoundException('Recado não encontrado.');
+    // Algumas opções de mais erros
+    // BadRequestsException
+    // UnauthorizedException
+  }
+
   findAll() {
     return this.recados;
   }
 
   findOne(id: string) {
-    return this.recados.find(item => item.id === +id); // Ele acha o recado 1, e o '+' na frente do id, transforma ele de string para number
+    const recado = this.recados.find(item => item.id === +id); // Ele acha o recado 1, e o '+' na frente do id, transforma ele de string para number
+    if (recado) {
+      // Se p recado existe, ele retorna ele, mas se nao existe, ele passa e retorna um erro
+      return recado;
+    }
+    // Dois parametros, um de texto e um do código do erro
+    // throw new HttpException('Recado não encontrado.', 404);
+    // throw new HttpException('Recado não encontrado.', HttpStatus.NOT_FOUND);
+    // throw new NotFoundException('Recado não encontrado.'); // Esse ultimo, faz a msm coisa, porem mais curto
+    this.throwNotFoundError();
   }
 
   create(body: any) {
@@ -48,16 +64,20 @@ export class RecadosService {
       item => item.id === +id,
     );
 
-    if (recadoExistenteIndex >= 0) {
-      // Verifica se o indice é existente
-      const recadoExistente = this.recados[recadoExistenteIndex]; // Cria uma variavel que recebe os dados que tinha no array recados no indice passado
-
-      this.recados[recadoExistenteIndex] = {
-        // Inverte os dados que tinha naquela posição pra um novo passado
-        ...recadoExistente,
-        ...body,
-      };
+    if (recadoExistenteIndex < 0) {
+      // Recado nao existe
+      this.throwNotFoundError();
     }
+
+    // Verifica se o indice é existente
+    const recadoExistente = this.recados[recadoExistenteIndex]; // Cria uma variavel que recebe os dados que tinha no array recados no indice passado
+
+    this.recados[recadoExistenteIndex] = {
+      // Inverte os dados que tinha naquela posição pra um novo passado
+      ...recadoExistente,
+      ...body,
+    };
+    return this.recados[recadoExistenteIndex];
   }
 
   remove(id: string) {
@@ -66,9 +86,14 @@ export class RecadosService {
       item => item.id === +id,
     );
 
-    if (recadoExistenteIndex >= 0) {
-      // Se ele existe
-      this.recados.splice(recadoExistenteIndex, 1); // Nos apagamos o item, se nao existe, nao faz nada
+    if (recadoExistenteIndex < 0) {
+      // Recado nao existe
+      this.throwNotFoundError();
     }
+
+    const recado = this.recados[recadoExistenteIndex];
+    this.recados.splice(recadoExistenteIndex, 1); // Nos apagamos o item, se nao existe, nao faz nada
+
+    return recado;
   }
 }
