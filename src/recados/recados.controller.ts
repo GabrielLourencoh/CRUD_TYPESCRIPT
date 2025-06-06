@@ -13,6 +13,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { RecadosService } from './recados.service';
+import { CreateRecadoDto } from './dto/create-recado.dto';
+import { UpdateRecadoDto } from './dto/update-recado.dto';
 
 //CRUD
 // Create -> POST -> Criar um recado
@@ -23,6 +25,9 @@ import { RecadosService } from './recados.service';
 
 // PATCH é utilizado para atualizar dados de um recurso
 // PUT é utilizado para atualizar um recurso inteiro
+
+// DTO – Data Transfer Object -> Objeto de transferencia de dados
+// DTO -> Objeto simples -> No nest, serve tanto para validar dados / transformar dados
 
 @Controller('recados') // Decorator de controle
 export class RecadosController {
@@ -44,15 +49,15 @@ export class RecadosController {
   }
 
   @Post()
-  create(@Body() body: any) {
+  create(@Body() createRecadoDto: CreateRecadoDto) {
     // Decorator @Body serve para trazer os dados enviados da nossa requisição e na frente, definimos a variavel que recebe esses dados enviados
-    return this.recadosService.create(body);
+    return this.recadosService.create(createRecadoDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: any) {
+  update(@Param('id') id: string, @Body() updateRecadoDto: UpdateRecadoDto) {
     // Preciso do id e do body da requisição
-    return this.recadosService.update(id, body);
+    return this.recadosService.update(id, updateRecadoDto);
   }
 
   @Delete(':id')

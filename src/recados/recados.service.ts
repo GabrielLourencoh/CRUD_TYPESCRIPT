@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Recado } from './entities/recado.entity';
+import { CreateRecadoDto } from './dto/create-recado.dto';
+import { UpdateRecadoDto } from './dto/update-recado.dto';
 
 @Injectable()
 export class RecadosService {
@@ -43,7 +42,7 @@ export class RecadosService {
     this.throwNotFoundError();
   }
 
-  create(body: any) {
+  create(createRecadoDto: CreateRecadoDto) {
     // Pega o body como parametro
     this.lastId++; // Adiciona no ultimo id
     const id = this.lastId; // PEga o ultimo id e atribui ao novo criado
@@ -51,14 +50,17 @@ export class RecadosService {
     const novoRecado = {
       // Cria um novo recado com o id e o body passado
       id,
-      ...body,
+      ...createRecadoDto,
+      lido: false,
+      data: new Date(),
     };
+
     this.recados.push(novoRecado); // Adiciona o novo recado no array de recados
 
     return novoRecado;
   }
 
-  update(id: string, body: any) {
+  update(id: string, updateRecadoDto: UpdateRecadoDto) {
     const recadoExistenteIndex = this.recados.findIndex(
       // Pega o indice passado na url
       item => item.id === +id,
@@ -75,7 +77,7 @@ export class RecadosService {
     this.recados[recadoExistenteIndex] = {
       // Inverte os dados que tinha naquela posição pra um novo passado
       ...recadoExistente,
-      ...body,
+      ...updateRecadoDto,
     };
     return this.recados[recadoExistenteIndex];
   }
