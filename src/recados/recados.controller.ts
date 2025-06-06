@@ -12,6 +12,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
+import { RecadosService } from './recados.service';
 
 //CRUD
 // Create -> POST -> Criar um recado
@@ -25,6 +26,8 @@ import {
 
 @Controller('recados') // Decorator de controle
 export class RecadosController {
+  constructor(private readonly recadosService: RecadosService) {}
+
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
