@@ -59,22 +59,16 @@ export class RecadosService {
     this.throwNotFoundError();
   }
 
-  create(createRecadoDto: CreateRecadoDto) {
-    // Pega o body como parametro
-    this.lastId++; // Adiciona no ultimo id
-    const id = this.lastId; // PEga o ultimo id e atribui ao novo criado
-
+  async create(createRecadoDto: CreateRecadoDto) {
     const novoRecado = {
       // Cria um novo recado com o id e o body passado
-      id,
       ...createRecadoDto,
       lido: false,
       data: new Date(),
     };
+    const recado = await this.recadoRepository.create(novoRecado); // Cria o novo recado
 
-    this.recados.push(novoRecado); // Adiciona o novo recado no array de recados
-
-    return novoRecado;
+    return this.recadoRepository.save(recado); // salva o novo recado na base de dados
   }
 
   update(id: string, updateRecadoDto: UpdateRecadoDto) {
@@ -99,20 +93,13 @@ export class RecadosService {
     return this.recados[recadoExistenteIndex];
   }
 
-  remove(id: number) {
-    const recadoExistenteIndex = this.recados.findIndex(
-      // Achando o indice do recado que desejamos apagar
-      item => item.id === +id,
-    );
+  async remove(id: number) {
+    const recado = await this.recadoRepository.findOneBy({ id });
 
-    if (recadoExistenteIndex < 0) {
-      // Recado nao existe
-      this.throwNotFoundError();
+    if (!recado) {
+      return this.throwNotFoundError();
     }
 
-    const recado = this.recados[recadoExistenteIndex];
-    this.recados.splice(recadoExistenteIndex, 1); // Nos apagamos o item, se nao existe, nao faz nada
-
-    return recado;
+    return await this.recadoRepository.remove(recado);
   }
 }

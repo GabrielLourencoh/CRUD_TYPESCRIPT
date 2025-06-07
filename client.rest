@@ -8,9 +8,9 @@ GET {{baseUrl}}/recados/
 
 ### Lista apenas um recado
 
-GET {{baseUrl}}/recados/3/
-### Cria um recado
+GET {{baseUrl}}/recados/2/
 
+### Cria um recado
 POST {{baseUrl}}/recados/
 Content-Type: application/json
 
@@ -31,4 +31,4 @@ Content-Type: application/json
 }
 
 ### Apaga um recado 
-DELETE {{baseUrl}}/recados/2/
+DELETE {{baseUrl}}/recados/1/
