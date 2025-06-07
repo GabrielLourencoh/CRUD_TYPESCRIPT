@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
@@ -11,6 +10,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
@@ -43,7 +43,7 @@ export class RecadosController {
 
   // Encontra um recado
   @Get(':id') //estrutura (:nomedoparametroquequeremos)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     // O decorator Param nos permite pegar determinados parametros da url
     return this.recadosService.findOne(id); // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
   }
@@ -61,7 +61,7 @@ export class RecadosController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.recadosService.remove(id);
   }
 }

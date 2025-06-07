@@ -29,8 +29,8 @@ export class RecadosService {
     return this.recados;
   }
 
-  findOne(id: string) {
-    const recado = this.recados.find(item => item.id === +id); // Ele acha o recado 1, e o '+' na frente do id, transforma ele de string para number
+  findOne(id: number) {
+    const recado = this.recados.find(item => item.id === id); // Ele acha o recado 1, e o '+' na frente do id, transforma ele de string para number
     if (recado) {
       // Se p recado existe, ele retorna ele, mas se nao existe, ele passa e retorna um erro
       return recado;
@@ -82,7 +82,7 @@ export class RecadosService {
     return this.recados[recadoExistenteIndex];
   }
 
-  remove(id: string) {
+  remove(id: number) {
     const recadoExistenteIndex = this.recados.findIndex(
       // Achando o indice do recado que desejamos apagar
       item => item.id === +id,

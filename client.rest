@@ -8,7 +8,7 @@ GET {{baseUrl}}/recados/
 
 ### Lista apenas um recado
 
-GET {{baseUrl}}/recados/2/
+GET {{baseUrl}}/recados/3/
 ### Cria um recado
 
 POST {{baseUrl}}/recados/
@@ -17,19 +17,17 @@ Content-Type: application/json
 {
     "texto": "4Novo recado",
     "de": "Gabriel",
-    "para": "Neusa",
+    "para": "Neusa"
 }
 ### Atualiza um recado
 
-PATCH {{baseUrl}}/recados/2/
+PATCH {{baseUrl}}/recados/3/
 Content-Type: application/json
 
 {
     "texto": "ATUALIZANDO O RECADO",
-    "de": "Gabriel",
-    "para": "Neusa",
-    "lido": false,
-    "data": "2025-06-06T21:29:03.649Z"
+    "de": "Joao",
+    "para": "Neusa"
 }
 
 ### Apaga um recado 
