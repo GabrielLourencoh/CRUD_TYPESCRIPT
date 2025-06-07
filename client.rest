@@ -18,8 +18,6 @@ Content-Type: application/json
     "texto": "4Novo recado",
     "de": "Gabriel",
     "para": "Neusa",
-    "lido": false,
-    "data": "2025-06-06T21:29:03.649Z"
 }
 ### Atualiza um recado
 
