@@ -1,6 +1,12 @@
-export class UpdateRecadoDto {
-  // Uma boa pratica é deixar como readonly, para que não possa ser alterados
-  readonly texto?: string; // o '?' serve para ser OPCIONAL
-  readonly de?: string;
-  readonly para?: string;
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+// instalamos o npm i @nestjs/mapped-types para cá e
+
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateRecadoDto } from './create-recado.dto';
+import { IsBoolean, IsOptional } from 'class-validator';
+
+export class UpdateRecadoDto extends PartialType(CreateRecadoDto) {
+  @IsBoolean()
+  @IsOptional()
+  readonly lido?: boolean;
 }
