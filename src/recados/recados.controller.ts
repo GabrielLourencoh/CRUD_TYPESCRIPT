@@ -36,9 +36,10 @@ export class RecadosController {
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
-  findAll(@Query() pagination: any) {
+  async findAll(@Query() pagination: any) {
     const { limit = 10, offset = 0 } = pagination;
-    return this.recadosService.findAll();
+    const recados = await this.recadosService.findAll();
+    return recados;
   }
 
   // Encontra um recado

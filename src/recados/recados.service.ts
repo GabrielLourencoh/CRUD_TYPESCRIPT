@@ -2,9 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Recado } from './entities/recado.entity';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RecadosService {
+  constructor(
+    @InjectRepository(Recado) // O decorator @InjectRepository informa ao NestJS que queremos injetar um repositório do TypeORM vinculado à entidade Recado.
+    private readonly recadoRepository: Repository<Recado>, // Criamos uma propriedade privada e somente leitura chamada recadoRepository, que será do tipo Repository<Recado>. Isso permite acessar métodos como .find(), .save(), .delete(), etc., diretamente no banco de dados para a entidade Recado.
+  ) {}
+
   private lastId = 1; // Nosso ultimo recado
   private recados: Recado[] = [
     // Array que carrega nossos recados
@@ -25,12 +32,22 @@ export class RecadosService {
     // UnauthorizedException
   }
 
-  findAll() {
-    return this.recados;
+  async findAll() {
+    // async transforma em uma função assíncrona que espera uma promise
+    const recados = await this.recadoRepository.find(); // await é aguardando encontrar todos os recados e retornar
+    return recados;
   }
 
-  findOne(id: number) {
-    const recado = this.recados.find(item => item.id === id); // Ele acha o recado 1, e o '+' na frente do id, transforma ele de string para number
+  async findOne(id: number) {
+    // const recado = this.recados.find(item => item.id === id); // Ele acha o recado 1, e o '+' na frente do id, transforma ele de string para number
+
+    // Pegando UM recado onde o id for igual ao id do banco
+    const recado = await this.recadoRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
     if (recado) {
       // Se p recado existe, ele retorna ele, mas se nao existe, ele passa e retorna um erro
       return recado;
