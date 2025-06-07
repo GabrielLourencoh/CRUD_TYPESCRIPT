@@ -12,19 +12,6 @@ export class RecadosService {
     private readonly recadoRepository: Repository<Recado>, // Criamos uma propriedade privada e somente leitura chamada recadoRepository, que será do tipo Repository<Recado>. Isso permite acessar métodos como .find(), .save(), .delete(), etc., diretamente no banco de dados para a entidade Recado.
   ) {}
 
-  private lastId = 1; // Nosso ultimo recado
-  private recados: Recado[] = [
-    // Array que carrega nossos recados
-    {
-      id: 1,
-      texto: 'Este é um recado de teste',
-      de: 'Gabriel',
-      para: 'Neusa',
-      lido: false,
-      data: new Date(),
-    },
-  ];
-
   throwNotFoundError() {
     throw new NotFoundException('Recado não encontrado.');
     // Algumas opções de mais erros
@@ -71,26 +58,23 @@ export class RecadosService {
     return this.recadoRepository.save(recado); // salva o novo recado na base de dados
   }
 
-  update(id: string, updateRecadoDto: UpdateRecadoDto) {
-    const recadoExistenteIndex = this.recados.findIndex(
-      // Pega o indice passado na url
-      item => item.id === +id,
-    );
+  async update(id: number, updateRecadoDto: UpdateRecadoDto) {
+    const partialUpdateRecadoDto = {
+      lido: updateRecadoDto?.lido,
+      texto: updateRecadoDto?.texto,
+    };
+    const recado = await this.recadoRepository.preload({
+      id,
+      ...partialUpdateRecadoDto,
+    });
 
-    if (recadoExistenteIndex < 0) {
-      // Recado nao existe
-      this.throwNotFoundError();
+    if (!recado) {
+      return this.throwNotFoundError();
     }
 
-    // Verifica se o indice é existente
-    const recadoExistente = this.recados[recadoExistenteIndex]; // Cria uma variavel que recebe os dados que tinha no array recados no indice passado
+    await this.recadoRepository.save(recado);
 
-    this.recados[recadoExistenteIndex] = {
-      // Inverte os dados que tinha naquela posição pra um novo passado
-      ...recadoExistente,
-      ...updateRecadoDto,
-    };
-    return this.recados[recadoExistenteIndex];
+    return recado;
   }
 
   async remove(id: number) {
