@@ -43,14 +43,14 @@ GET {{baseUrl}}/pessoas/
 
 ### Lista apenas uma Pessoa
 
-GET {{baseUrl}}/pessoas/2/
+GET {{baseUrl}}/pessoas/8/
 
 ### Cria uma PEssoa
 POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "email1@email.com",
+    "email": "email2@email.com",
     "password": "123456",
     "nome": "Gabriel"
 }
@@ -66,4 +66,4 @@ Content-Type: application/json
 }
 
 ### Apaga uma pessoa 
-DELETE {{baseUrl}}/pessoas/1/
+DELETE {{baseUrl}}/pessoas/8/

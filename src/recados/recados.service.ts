@@ -47,6 +47,9 @@ export class RecadosService {
   }
 
   async create(createRecadoDto: CreateRecadoDto) {
+    // Encontrar a pessoa que está criando o recado
+    // Encontrar a pessoa para quem está sendo enviado
+
     const novoRecado = {
       // Cria um novo recado com o id e o body passado
       ...createRecadoDto,
