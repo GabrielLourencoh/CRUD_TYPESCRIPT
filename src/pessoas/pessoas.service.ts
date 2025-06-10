@@ -53,8 +53,23 @@ export class PessoasService {
     return `This action returns a #${id} pessoa`;
   }
 
-  update(id: number, updatePessoaDto: UpdatePessoaDto) {
-    return `This action updates a #${id} pessoa`;
+  async update(id: number, updatePessoaDto: UpdatePessoaDto) {
+    const dadosPessoa = {
+      // Opcionais
+      nome: updatePessoaDto?.nome,
+      passwordHash: updatePessoaDto?.password, // Aqui deve ser o hash da senha
+    };
+    // Encontrando a pessoa
+    const pessoa = await this.pessoaRepository.preload({
+      id,
+      ...dadosPessoa,
+    });
+
+    if (!pessoa) {
+      throw new NotFoundException('Pessoa não encontrada');
+    }
+
+    return this.pessoaRepository.save(pessoa);
   }
 
   async remove(id: number) {

@@ -57,13 +57,13 @@ Content-Type: application/json
 
 ### Atualiza uma pessoa
 
-PATCH {{baseUrl}}/pessoas/5/
+PATCH {{baseUrl}}/pessoas/8/
 Content-Type: application/json
 
 {
-    "lido": false,
-    "texto": "testando atualização"
+    "password": "99999",
+    "nome": "Henrique"
 }
 
 ### Apaga uma pessoa 
-DELETE {{baseUrl}}/pessoas/6/
+DELETE {{baseUrl}}/pessoas/1/
