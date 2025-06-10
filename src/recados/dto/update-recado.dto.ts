@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 // instalamos o npm i @nestjs/mapped-types para cá e
 
 import { PartialType } from '@nestjs/mapped-types';

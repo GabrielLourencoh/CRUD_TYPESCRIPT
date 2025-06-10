@@ -31,3 +31,26 @@ Content-Type: application/json
 
 ### Apaga um recado 
 DELETE {{baseUrl}}/recados/4/
+
+
+
+
+# PESSOAS
+### Lista todos as Pessoas
+GET {{baseUrl}}/pessoas/
+?limit=10
+&offset=10
+
+### Lista apenas uma Pessoa
+
+GET {{baseUrl}}/pessoas/2/
+
+### Cria uma PEssoa
+POST {{baseUrl}}/pessoas/
+Content-Type: application/json
+
+{
+    "email": "email1@email.com",
+    "password": "123456",
+    "nome": "Gabriel"
+}
