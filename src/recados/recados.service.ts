@@ -11,7 +11,7 @@ export class RecadosService {
   constructor(
     @InjectRepository(Recado) // O decorator @InjectRepository informa ao NestJS que queremos injetar um repositório do TypeORM vinculado à entidade Recado.
     private readonly recadoRepository: Repository<Recado>, // Criamos uma propriedade privada e somente leitura chamada recadoRepository, que será do tipo Repository<Recado>. Isso permite acessar métodos como .find(), .save(), .delete(), etc., diretamente no banco de dados para a entidade Recado.
-    private readonly pessoasService: PessoasService,
+    private readonly pessoasService: PessoasService, // Injeta o serviço de pessoas para acessar ou manipular dados da entidade Pessoa (ex: buscar remetente ou destinatário de um recado)
   ) {}
 
   throwNotFoundError() {
@@ -23,7 +23,23 @@ export class RecadosService {
 
   async findAll() {
     // async transforma em uma função assíncrona que espera uma promise
-    const recados = await this.recadoRepository.find(); // await é aguardando encontrar todos os recados e retornar
+    const recados = await this.recadoRepository.find({
+      relations: ['de', 'para'],
+      order: {
+        // Ordenando pelo id em ordem decrescente
+        id: 'desc',
+      },
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
+      },
+    }); // await é aguardando encontrar todos os recados e retornar
     return recados;
   }
 
@@ -34,6 +50,21 @@ export class RecadosService {
     const recado = await this.recadoRepository.findOne({
       where: {
         id: id,
+      },
+      relations: ['de', 'para'],
+      order: {
+        // Ordenando pelo id em ordem decrescente
+        id: 'desc',
+      },
+      select: {
+        de: {
+          id: true,
+          nome: true,
+        },
+        para: {
+          id: true,
+          nome: true,
+        },
       },
     });
 
@@ -49,18 +80,33 @@ export class RecadosService {
   }
 
   async create(createRecadoDto: CreateRecadoDto) {
+    const { deId, paraId } = createRecadoDto;
     // Encontrar a pessoa que está criando o recado
+    const de = await this.pessoasService.findOne(deId);
+
     // Encontrar a pessoa para quem está sendo enviado
+    const para = await this.pessoasService.findOne(paraId);
 
     const novoRecado = {
       // Cria um novo recado com o id e o body passado
-      ...createRecadoDto,
+      texto: createRecadoDto.texto,
+      de,
+      para,
       lido: false,
       data: new Date(),
     };
     const recado = await this.recadoRepository.create(novoRecado); // Cria o novo recado
+    await this.recadoRepository.save(recado);
 
-    return this.recadoRepository.save(recado); // salva o novo recado na base de dados
+    return {
+      ...recado,
+      de: {
+        id: recado.de.id,
+      },
+      para: {
+        id: recado.para.id,
+      },
+    };
   }
 
   async update(id: number, updateRecadoDto: UpdateRecadoDto) {
