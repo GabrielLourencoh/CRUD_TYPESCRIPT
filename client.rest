@@ -4,11 +4,11 @@
 ### Lista todos os recados
 GET {{baseUrl}}/recados/
 ?limit=10
-&offset=10
+&offset=0
 
 ### Lista apenas um recado
 
-GET {{baseUrl}}/recados/10/
+GET {{baseUrl}}/recados/13/
 
 ### Cria um recado
 POST {{baseUrl}}/recados/

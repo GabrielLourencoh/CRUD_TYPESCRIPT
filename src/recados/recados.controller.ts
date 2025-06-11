@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Body,
   Patch,
@@ -15,6 +14,7 @@ import {
 import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 //CRUD
 // Create -> POST -> Criar um recado
@@ -36,9 +36,9 @@ export class RecadosController {
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
-  async findAll(@Query() pagination: any) {
-    const { limit = 10, offset = 0 } = pagination;
-    const recados = await this.recadosService.findAll();
+  async findAll(@Query() paginationDto: PaginationDto) {
+    // return 'Retorna todos os recados. Limit=${limit}, Offset=${offset}
+    const recados = await this.recadosService.findAll(paginationDto);
     return recados;
   }
 

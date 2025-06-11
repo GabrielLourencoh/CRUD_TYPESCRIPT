@@ -5,6 +5,7 @@ import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PessoasService } from 'src/pessoas/pessoas.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class RecadosService {
@@ -21,9 +22,14 @@ export class RecadosService {
     // UnauthorizedException
   }
 
-  async findAll() {
+  async findAll(paginationDto?: PaginationDto) {
+    const limit = paginationDto?.limit ?? 10;
+    const offset = paginationDto?.offset ?? 0;
+
     // async transforma em uma função assíncrona que espera uma promise
     const recados = await this.recadoRepository.find({
+      take: limit, // Quantos registros serao exibidos (por pagina)
+      skip: offset, // Quantos registros devem ser pulados
       relations: ['de', 'para'],
       order: {
         // Ordenando pelo id em ordem decrescente
