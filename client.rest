@@ -15,17 +15,17 @@ POST {{baseUrl}}/recados/
 Content-Type: application/json
 
 {
-    "texto": "Gabriel esta enviando um recado para o Henrique",
-    "deId": 12,
-    "paraId": 13
+    "texto": "HEnrique esta enviando um recado para o Gabriel",
+    "deId": 14,
+    "paraId": 15
 }
 ### Atualiza um recado
 
-PATCH {{baseUrl}}/recados/5/
+PATCH {{baseUrl}}/recados/11/
 Content-Type: application/json
 
 {
-    "lido": false,
+    "lido": true,
     "texto": "testando atualização"
 }
 
@@ -50,9 +50,9 @@ POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "henri@email.com",
+    "email": "Gabriel@email.com",
     "password": "123456",
-    "nome": "Henrique Lourenco"
+    "nome": "Gabriel Lourenco"
 }
 
 ### Atualiza uma pessoa
@@ -66,4 +66,4 @@ Content-Type: application/json
 }
 
 ### Apaga uma pessoa 
-DELETE {{baseUrl}}/pessoas/8/
+DELETE {{baseUrl}}/pessoas/12/
