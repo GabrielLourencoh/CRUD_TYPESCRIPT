@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseInterceptors,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -38,6 +40,7 @@ export class RecadosController {
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
+  @UseInterceptors(AddHeaderInterceptor)
   async findAll(@Query() paginationDto: PaginationDto) {
     // return 'Retorna todos os recados. Limit=${limit}, Offset=${offset}
     const recados = await this.recadosService.findAll(paginationDto);
