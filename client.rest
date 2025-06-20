@@ -15,13 +15,13 @@ POST {{baseUrl}}/recados/
 Content-Type: application/json
 
 {
-    "texto": "HEnrique esta enviando um recado para o Gabriel",
-    "deId": 14,
-    "paraId": 15
+    "texto": "4 pro 3",
+    "deId": 4,
+    "paraId": 3
 }
 ### Atualiza um recado
 
-PATCH {{baseUrl}}/recados/11/
+PATCH {{baseUrl}}/recados/1/
 Content-Type: application/json
 
 {
