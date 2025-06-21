@@ -20,6 +20,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AddHeaderInterceptor } from 'src/common/interceptors/add-header.interceptor';
 import { TimmingConnectionInterceptor } from 'src/common/interceptors/timming-connection.interceptor';
 import { ErrorHandlingInterceptor } from 'src/common/interceptors/error-handling.interceptor';
+import { SimpleCacheInterceptor } from 'src/common/interceptors/simple-cache.interceptor';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -35,6 +36,7 @@ import { ErrorHandlingInterceptor } from 'src/common/interceptors/error-handling
 // DTO – Data Transfer Object -> Objeto de transferencia de dados
 // DTO -> Objeto simples -> No nest, serve tanto para validar dados / transformar dados
 
+@UseInterceptors(SimpleCacheInterceptor)
 @Controller('recados') // Decorator de controle
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
