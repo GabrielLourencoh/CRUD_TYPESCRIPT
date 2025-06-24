@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseInterceptors,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -31,6 +33,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 // DTO – Data Transfer Object -> Objeto de transferencia de dados
 // DTO -> Objeto simples -> No nest, serve tanto para validar dados / transformar dados
 
+@UseInterceptors(AuthTokenInterceptor)
 @Controller('recados') // Decorator de controle
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
