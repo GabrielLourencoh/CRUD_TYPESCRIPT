@@ -10,6 +10,7 @@ import {
   Param,
   Post,
   UseInterceptors,
+  Req,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -41,7 +42,8 @@ export class RecadosController {
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
-  async findAll(@Query() paginationDto: PaginationDto) {
+  async findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
+    console.log('RecadosController', req['user']);
     // return 'Retorna todos os recados. Limit=${limit}, Offset=${offset}
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
