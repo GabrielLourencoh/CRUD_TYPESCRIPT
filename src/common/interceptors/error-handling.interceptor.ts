@@ -12,7 +12,7 @@ import { catchError, throwError } from 'rxjs';
 export class ErrorHandlingInterceptor implements NestInterceptor {
   // eslint-disable-next-line @typescript-eslint/require-await
   async intercept(context: ExecutionContext, next: CallHandler<any>) {
-    console.log('ErrorHandlingInterceptor executado ANTES');
+    // console.log('ErrorHandlingInterceptor executado ANTES');
 
     // await new Promise(resolve => setTimeout(resolve, 3000)); // Travando a promise ser resolvida
 

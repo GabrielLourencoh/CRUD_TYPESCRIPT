@@ -21,7 +21,7 @@ export class AddHeaderInterceptor implements NestInterceptor {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     response.setHeader('X-Custom-Header', 'O Valor do cabeçalho');
 
-    console.log('AddHeaderInterceptor executado');
+    // console.log('AddHeaderInterceptor executado');
     return next.handle();
   }
 }
