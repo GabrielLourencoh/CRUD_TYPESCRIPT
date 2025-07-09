@@ -68,3 +68,14 @@ Content-Type: application/json
 
 ### Apaga uma pessoa 
 DELETE {{baseUrl}}/pessoas/12/
+
+
+# AUTH
+### Lista todos as Pessoas
+POST {{baseUrl}}/auth/
+Content-Type: application/json
+
+{
+    "email": "Gabriuel@gmail.com",
+    "password": "112233"
+}
