@@ -51,8 +51,8 @@ POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "GabrielTesteHash@email.com",
-    "password": "123456",
+    "email": "Gabriuel@gmail.com",
+    "password": "112233",
     "nome": "Gabriel Lourenco"
 }
 
