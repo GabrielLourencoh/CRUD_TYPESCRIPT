@@ -12,6 +12,8 @@ import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { SimpleMiddleware } from 'src/common/middlewares/simple.middleware';
 import { OutroMiddleware } from 'src/common/middlewares/outro.middleware';
 import { AuthModule } from 'src/auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import jwtConfig from 'src/auth/config/jwt.config';
 
 @Module({
   imports: [
@@ -28,6 +30,12 @@ import { AuthModule } from 'src/auth/auth.module';
     RecadosModule,
     PessoasModule,
     AuthModule,
+    // Temporario o debaixo
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+      load: [jwtConfig],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
