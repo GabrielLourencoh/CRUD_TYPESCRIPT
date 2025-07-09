@@ -10,5 +10,6 @@ import { BcryptService } from './hashing/bcrypt.service';
       useClass: BcryptService, // Usa essa classe aqui que implementa o contrato HashingService
     },
   ],
+  exports: [HashingService],
 })
 export class AuthModule {}

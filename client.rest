@@ -44,25 +44,25 @@ GET {{baseUrl}}/pessoas/
 
 ### Lista apenas uma Pessoa
 
-GET {{baseUrl}}/pessoas/8/
+GET {{baseUrl}}/pessoas/9/
 
 ### Cria uma PEssoa
 POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "GabrielTesteCOnexao@email.com",
+    "email": "GabrielTesteHash@email.com",
     "password": "123456",
     "nome": "Gabriel Lourenco"
 }
 
 ### Atualiza uma pessoa
 
-PATCH {{baseUrl}}/pessoas/8/
+PATCH {{baseUrl}}/pessoas/9/
 Content-Type: application/json
 
 {
-    "password": "99999",
+    "password": "aaaaa",
     "nome": "Henrique"
 }
 
