@@ -41,7 +41,7 @@ DELETE {{baseUrl}}/recados/4/
 GET {{baseUrl}}/pessoas/
 ?limit=10
 &offset=10
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEwLCJlbWFpbCI6IkdhYnJpdWVsQGdtYWlsLmNvbSIsImlhdCI6MTc1MjY4NzU2MCwiZXhwIjoxNzUyNjkxMTYwLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAifQ.Hb67aGWDIZ9PpAMMTRVVJ2kqimlncYZk_5xI8uxWOR8
+Authorization: Bearer teste
 
 ### Lista apenas uma Pessoa
 
