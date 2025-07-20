@@ -47,30 +47,32 @@ Authorization: Bearer {{authToken}}
 
 ### Lista apenas uma Pessoa
 
-GET {{baseUrl}}/pessoas/9/
+GET {{baseUrl}}/pessoas/11/
+Authorization: Bearer {{authToken}}
 
 ### Cria uma PEssoa
 POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "Gabriuel@gmail.com",
+    "email": "GabrielTeste@gmail.com",
     "password": "112233",
     "nome": "Gabriel Lourenco"
 }
 
 ### Atualiza uma pessoa
 
-PATCH {{baseUrl}}/pessoas/9/
+PATCH {{baseUrl}}/pessoas/12/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-    "password": "aaaaa",
-    "nome": "Henrique"
+    "nome": "Gabriel Lourenço Atualizando Meu Nome com JWT"
 }
 
 ### Apaga uma pessoa 
-DELETE {{baseUrl}}/pessoas/12/
+DELETE {{baseUrl}}/pessoas/11/
+Authorization: Bearer {{authToken}}
 
 
 # AUTH
@@ -80,6 +82,6 @@ POST {{baseUrl}}/auth/
 Content-Type: application/json
 
 {
-    "email": "Gabriuel@gmail.com",
+    "email": "GabrielTeste@gmail.com",
     "password": "112233"
 }
