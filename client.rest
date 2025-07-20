@@ -1,11 +1,13 @@
 @baseUrl = http://127.0.0.1:3000
+# Pegando o accessToken diretamente. Serve apenas para sermos mais rapidos no ambiente de desenvolvimento
+@authToken = {{authenticate.response.body.accessToken}}
 
 # RECADOS
 ### Lista todos os recados
 GET {{baseUrl}}/recados/
 ?limit=10
 &offset=0
-Authorization: Bearer 123456
+Authorization: Bearer {{authToken}}
 
 ### Lista apenas um recado
 
@@ -41,7 +43,7 @@ DELETE {{baseUrl}}/recados/4/
 GET {{baseUrl}}/pessoas/
 ?limit=10
 &offset=10
-Authorization: Bearer teste
+Authorization: Bearer {{authToken}}
 
 ### Lista apenas uma Pessoa
 
@@ -72,7 +74,8 @@ DELETE {{baseUrl}}/pessoas/12/
 
 
 # AUTH
-### Lista todos as Pessoas
+### Autenticação
+# @name authenticate
 POST {{baseUrl}}/auth/
 Content-Type: application/json
 
