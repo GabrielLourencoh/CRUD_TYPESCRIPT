@@ -7,7 +7,6 @@
 GET {{baseUrl}}/recados/
 ?limit=10
 &offset=0
-Authorization: Bearer {{authToken}}
 
 ### Lista apenas um recado
 
@@ -15,16 +14,17 @@ GET {{baseUrl}}/recados/13/
 
 ### Cria um recado
 POST {{baseUrl}}/recados/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
     "texto": "4 pro 3",
-    "deId": 4,
     "paraId": 3
 }
 ### Atualiza um recado
 
-PATCH {{baseUrl}}/recados/1/
+PATCH {{baseUrl}}/recados/7/
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
@@ -33,8 +33,8 @@ Content-Type: application/json
 }
 
 ### Apaga um recado 
-DELETE {{baseUrl}}/recados/4/
-
+DELETE {{baseUrl}}/recados/7/
+Authorization: Bearer {{authToken}}
 
 
 

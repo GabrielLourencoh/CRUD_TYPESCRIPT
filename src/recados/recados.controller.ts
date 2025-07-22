@@ -9,8 +9,7 @@ import {
   HttpStatus,
   Param,
   Post,
-  UseInterceptors,
-  Req,
+  UseGuards,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -18,7 +17,9 @@ import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interceptor';
+import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
+import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
+import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -34,7 +35,7 @@ import { AuthTokenInterceptor } from 'src/common/interceptors/auth-token.interce
 // DTO – Data Transfer Object -> Objeto de transferencia de dados
 // DTO -> Objeto simples -> No nest, serve tanto para validar dados / transformar dados
 
-@UseInterceptors(AuthTokenInterceptor)
+// @UseInterceptors(AuthTokenInterceptor)
 @Controller('recados') // Decorator de controle
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
@@ -42,8 +43,7 @@ export class RecadosController {
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
-  async findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
-    console.log('RecadosController', req['user']);
+  async findAll(@Query() paginationDto: PaginationDto) {
     // return 'Retorna todos os recados. Limit=${limit}, Offset=${offset}
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
@@ -56,20 +56,33 @@ export class RecadosController {
     return this.recadosService.findOne(id); // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
   }
 
+  @UseGuards(AuthTokenGuard)
   @Post()
-  create(@Body() createRecadoDto: CreateRecadoDto) {
+  create(
+    @Body() createRecadoDto: CreateRecadoDto,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
     // Decorator @Body serve para trazer os dados enviados da nossa requisição e na frente, definimos a variavel que recebe esses dados enviados
-    return this.recadosService.create(createRecadoDto);
+    return this.recadosService.create(createRecadoDto, tokenPayload);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateRecadoDto: UpdateRecadoDto) {
+  update(
+    @Param('id') id: number,
+    @Body() updateRecadoDto: UpdateRecadoDto,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
     // Preciso do id e do body da requisição
-    return this.recadosService.update(id, updateRecadoDto);
+    return this.recadosService.update(id, updateRecadoDto, tokenPayload);
   }
 
+  @UseGuards(AuthTokenGuard)
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.recadosService.remove(id);
+  remove(
+    @Param('id') id: number,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
+    return this.recadosService.remove(id, tokenPayload);
   }
 }

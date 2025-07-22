@@ -5,7 +5,7 @@ export class SimpleMiddleware implements NestMiddleware {
   //Interface padrão de um middleware
   // req -> request, res -> response, next -> NextFunction. OBS: todos do express
   use(req: Request, res: Response, next: NextFunction) {
-    console.log('SimpleMiddleware: Olá');
+    // console.log('SimpleMiddleware: Olá');
     const authorization = req.headers?.authorization;
 
     if (authorization) {
@@ -33,11 +33,11 @@ export class SimpleMiddleware implements NestMiddleware {
     // return next(); // Se eu colocar um return, nada que está abaixo dessa linha será executado
 
     // Executando uma ação após o proximo middleware
-    console.log('SimpleMiddleware: Tchau');
+    // console.log('SimpleMiddleware: Tchau');
 
     // on checa o status da conexao e faz alguma coisa se o status for esse passado.
     res.on('finish', () => {
-      console.log('SimpleMiddleware: Terminou');
+      // console.log('SimpleMiddleware: Terminou');
     });
   }
 }

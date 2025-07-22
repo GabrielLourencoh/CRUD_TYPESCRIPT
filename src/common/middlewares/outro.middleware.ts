@@ -5,7 +5,7 @@ export class OutroMiddleware implements NestMiddleware {
   //Interface padrão de um middleware
   // req -> request, res -> response, next -> NextFunction. OBS: todos do express
   use(req: Request, res: Response, next: NextFunction) {
-    console.log('OutroMiddleware: Olá');
+    // console.log('OutroMiddleware: Olá');
     const authorization = req.headers?.authorization;
 
     if (authorization) {
@@ -25,6 +25,6 @@ export class OutroMiddleware implements NestMiddleware {
     next();
 
     // Executando uma ação após o proximo middleware
-    console.log('OutroMiddleware: Tchau');
+    // console.log('OutroMiddleware: Tchau');
   }
 }
