@@ -44,7 +44,6 @@ export class RecadosController {
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
   async findAll(@Query() paginationDto: PaginationDto) {
-    // return 'Retorna todos os recados. Limit=${limit}, Offset=${offset}
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
   }
