@@ -14,6 +14,8 @@ import { OutroMiddleware } from 'src/common/middlewares/outro.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
+import { APP_FILTER } from '@nestjs/core';
+import { MyExceptionFilter } from 'src/common/exceptions/my-exception.filter';
 
 @Module({
   imports: [
@@ -38,7 +40,13 @@ import jwtConfig from 'src/auth/config/jwt.config';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: MyExceptionFilter,
+    },
+  ],
   exports: [],
 })
 export class AppModule implements NestModule {

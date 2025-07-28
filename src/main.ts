@@ -14,6 +14,7 @@ async function bootstrap() {
     }),
     new ParseIntIdPipe(),
   ); // Criando uma instancia do validationpipe
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
