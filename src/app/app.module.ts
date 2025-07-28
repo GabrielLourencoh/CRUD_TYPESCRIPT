@@ -1,20 +1,12 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RecadosModule } from 'src/recados/recados.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
-import { SimpleMiddleware } from 'src/common/middlewares/simple.middleware';
 import { AuthModule } from 'src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
-import { APP_FILTER } from '@nestjs/core';
-import { MyExceptionFilter } from 'src/common/exceptions/my-exception.filter';
 
 @Module({
   imports: [
@@ -41,18 +33,11 @@ import { MyExceptionFilter } from 'src/common/exceptions/my-exception.filter';
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_FILTER,
-      useClass: MyExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: MyExceptionFilter,
+    // },
   ],
   exports: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SimpleMiddleware).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+export class AppModule {}
