@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { Recado } from './entities/recado.entity';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { RecadosUtils } from './recados.utils';
+import { SERVER_NAME } from 'src/common/constants/server-name.constant';
 
 @Module({
   imports: [
@@ -17,6 +18,10 @@ import { RecadosUtils } from './recados.utils';
     {
       provide: RecadosUtils, // Token
       useClass: RecadosUtils, // Valor a ser usado
+    },
+    {
+      provide: SERVER_NAME,
+      useValue: 'My name is NestJS',
     },
   ],
   exports: [

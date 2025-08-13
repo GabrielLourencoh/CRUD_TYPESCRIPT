@@ -10,6 +10,7 @@ import {
   Param,
   Post,
   UseGuards,
+  Inject,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 import { RecadosUtils } from './recados.utils';
+import { SERVER_NAME } from 'src/common/constants/server-name.constant';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -42,12 +44,15 @@ export class RecadosController {
   constructor(
     private readonly recadosService: RecadosService,
     private readonly recadosUtils: RecadosUtils,
+    @Inject(SERVER_NAME)
+    private readonly serverName: string,
   ) {}
 
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
   async findAll(@Query() paginationDto: PaginationDto) {
+    console.log(this.serverName);
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
   }
