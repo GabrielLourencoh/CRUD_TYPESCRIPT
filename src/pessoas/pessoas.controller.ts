@@ -14,10 +14,14 @@ import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
+import { RecadosUtils } from 'src/recados/recados.utils';
 
 @Controller('pessoas')
 export class PessoasController {
-  constructor(private readonly pessoasService: PessoasService) {}
+  constructor(
+    private readonly pessoasService: PessoasService,
+    private readonly recadosUtils: RecadosUtils,
+  ) {}
 
   @Post()
   create(@Body() createPessoaDto: CreatePessoaDto) {
@@ -27,6 +31,7 @@ export class PessoasController {
   @UseGuards(AuthTokenGuard)
   @Get()
   findAll() {
+    console.log(this.recadosUtils.inverteString('gabriel'));
     return this.pessoasService.findAll();
   }
 

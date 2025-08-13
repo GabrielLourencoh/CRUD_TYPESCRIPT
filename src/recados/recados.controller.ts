@@ -20,6 +20,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
+import { RecadosUtils } from './recados.utils';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -38,7 +39,10 @@ import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 // @UseInterceptors(AuthTokenInterceptor)
 @Controller('recados') // Decorator de controle
 export class RecadosController {
-  constructor(private readonly recadosService: RecadosService) {}
+  constructor(
+    private readonly recadosService: RecadosService,
+    private readonly recadosUtils: RecadosUtils,
+  ) {}
 
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
@@ -52,6 +56,7 @@ export class RecadosController {
   @Get(':id') //estrutura (:nomedoparametroquequeremos)
   findOne(@Param('id') id: number) {
     // O decorator Param nos permite pegar determinados parametros da url
+    console.log(this.recadosUtils.inverteString('gabriel'));
     return this.recadosService.findOne(id); // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
   }
 

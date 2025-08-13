@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { PessoasService } from 'src/pessoas/pessoas.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
+import { RecadosUtils } from './recados.utils';
 
 @Injectable()
 export class RecadosService {
@@ -18,6 +19,7 @@ export class RecadosService {
     @InjectRepository(Recado) // O decorator @InjectRepository informa ao NestJS que queremos injetar um repositório do TypeORM vinculado à entidade Recado.
     private readonly recadoRepository: Repository<Recado>, // Criamos uma propriedade privada e somente leitura chamada recadoRepository, que será do tipo Repository<Recado>. Isso permite acessar métodos como .find(), .save(), .delete(), etc., diretamente no banco de dados para a entidade Recado.
     private readonly pessoasService: PessoasService, // Injeta o serviço de pessoas para acessar ou manipular dados da entidade Pessoa (ex: buscar remetente ou destinatário de um recado)
+    private readonly recadosUtils: RecadosUtils,
   ) {}
 
   throwNotFoundError() {
@@ -30,6 +32,7 @@ export class RecadosService {
   async findAll(paginationDto?: PaginationDto) {
     const limit = paginationDto?.limit ?? 10;
     const offset = paginationDto?.offset ?? 0;
+    console.log(this.recadosUtils.inverteString('gabriel'));
 
     // async transforma em uma função assíncrona que espera uma promise
     const recados = await this.recadoRepository.find({
