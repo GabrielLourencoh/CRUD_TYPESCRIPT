@@ -5,6 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { Recado } from './entities/recado.entity';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { RecadosUtils } from './recados.utils';
+import { RegexFactory } from 'src/common/regex/regex.factory';
+import {
+  ONLY_LOWERCASE_LETTERS_REGEX,
+  REMOVE_SPACES_REGEX,
+} from './recados.constants';
 
 @Module({
   imports: [
@@ -14,16 +19,25 @@ import { RecadosUtils } from './recados.utils';
   controllers: [RecadosController],
   providers: [
     RecadosService,
+    RecadosUtils,
+    RegexFactory,
     {
-      provide: RecadosUtils, // Token
-      useClass: RecadosUtils, // Valor a ser usado
+      provide: REMOVE_SPACES_REGEX,
+      useFactory: (regexFactory: RegexFactory) => {
+        // Meu codigo/logica
+        return regexFactory.create('RemoveSpacesRegex');
+      }, // Factory
+      inject: [RegexFactory], // Injetando na factory na ordem
+    },
+    {
+      provide: ONLY_LOWERCASE_LETTERS_REGEX,
+      useFactory: (regexFactory: RegexFactory) => {
+        // Meu codigo/logica
+        return regexFactory.create('OnlyLowercaseLettersRegex');
+      }, // Factory
+      inject: [RegexFactory], // Injetando na factory na ordem
     },
   ],
-  exports: [
-    {
-      provide: RecadosUtils,
-      useClass: RecadosUtils,
-    },
-  ],
+  exports: [RecadosUtils],
 })
 export class RecadosModule {}

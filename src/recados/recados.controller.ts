@@ -10,6 +10,7 @@ import {
   Param,
   Post,
   UseGuards,
+  Inject,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -20,7 +21,12 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
-import { RecadosUtils } from './recados.utils';
+import { RemoveSpacesRegex } from 'src/common/regex/remove-spaces.regex';
+import {
+  ONLY_LOWERCASE_LETTERS_REGEX,
+  REMOVE_SPACES_REGEX,
+} from './recados.constants';
+import { OnlyLowercaseLettersRegex } from 'src/common/regex/only-lowercase-letters.regex';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -41,13 +47,18 @@ import { RecadosUtils } from './recados.utils';
 export class RecadosController {
   constructor(
     private readonly recadosService: RecadosService,
-    private readonly recadosUtils: RecadosUtils,
+    @Inject(REMOVE_SPACES_REGEX)
+    private readonly removeSpacesRegex: RemoveSpacesRegex,
+    @Inject(ONLY_LOWERCASE_LETTERS_REGEX)
+    private readonly onlyLowercaseLettersRegex: OnlyLowercaseLettersRegex,
   ) {}
 
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
   async findAll(@Query() paginationDto: PaginationDto) {
+    console.log(this.removeSpacesRegex.execute('REMOVE OS ESPACO'));
+    console.log(this.onlyLowercaseLettersRegex.execute('REMOVE OS ESPACO'));
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
   }
@@ -56,7 +67,6 @@ export class RecadosController {
   @Get(':id') //estrutura (:nomedoparametroquequeremos)
   findOne(@Param('id') id: number) {
     // O decorator Param nos permite pegar determinados parametros da url
-    console.log(this.recadosUtils.inverteString('gabriel'));
     return this.recadosService.findOne(id); // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
   }
 
