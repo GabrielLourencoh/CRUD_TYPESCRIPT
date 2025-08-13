@@ -6,10 +6,3 @@ export class RecadosUtils {
     return str.split('').reverse().join('');
   }
 }
-
-@Injectable()
-export class RecadosUtilsMock {
-  inverteString() {
-    return 'bla bla bla';
-  }
-}
