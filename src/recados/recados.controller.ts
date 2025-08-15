@@ -10,6 +10,7 @@ import {
   Param,
   Post,
   UseGuards,
+  Inject,
   // ParseIntPipe,
   // UsePipes,
 } from '@nestjs/common';
@@ -20,6 +21,10 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
+import {
+  MY_DYNAMIC_CONFIG,
+  MyDynamicModuleConfigs,
+} from 'src/my-dinamic/my-dynamic.module';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -38,7 +43,13 @@ import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 // @UseInterceptors(AuthTokenInterceptor)
 @Controller('recados') // Decorator de controle
 export class RecadosController {
-  constructor(private readonly recadosService: RecadosService) {}
+  constructor(
+    private readonly recadosService: RecadosService,
+    @Inject(MY_DYNAMIC_CONFIG)
+    private readonly myDynamicConfigs: MyDynamicModuleConfigs,
+  ) {
+    console.log(this.myDynamicConfigs);
+  }
 
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200

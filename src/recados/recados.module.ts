@@ -5,11 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { Recado } from './entities/recado.entity';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { RecadosUtils } from './recados.utils';
+import { MyDynamicModule } from 'src/my-dinamic/my-dynamic.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Recado]),
     forwardRef(() => PessoasModule),
+    MyDynamicModule.register({
+      apiKey: 'Aqui tem a API KEY',
+      apiUrl: 'http://apiurl',
+    }),
   ],
   controllers: [RecadosController],
   providers: [RecadosService, RecadosUtils],
