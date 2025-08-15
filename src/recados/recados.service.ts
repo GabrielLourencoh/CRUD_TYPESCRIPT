@@ -12,6 +12,10 @@ import { PessoasService } from 'src/pessoas/pessoas.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 
+// Scope.DEFAULT -> O provider em questão é um singleton
+// Scope.REQUEST -> O provider em questão é instanciado a cada requisição
+// Scope.TRANSIENT -> É criada uma instancia do provider para cada classe que injetar este provider
+
 @Injectable()
 export class RecadosService {
   constructor(
