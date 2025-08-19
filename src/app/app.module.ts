@@ -5,17 +5,17 @@ import { RecadosModule } from 'src/recados/recados.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigType } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
 import * as Joi from '@hapi/joi';
 import appConfig from './app.config';
 
 @Module({
   imports: [
+    ConfigModule.forFeature(appConfig),
     ConfigModule.forRoot({
       // envFilePath: '.env', // Caminho da variavel de ambiente
       // ignoreEnvFile: true, // Ignora arquivos .env
-      load: [appConfig],
       validationSchema: Joi.object({
         DATABASE_TYPE: Joi.required(),
         DATABASE_HOST: Joi.required(),
@@ -38,20 +38,18 @@ import appConfig from './app.config';
     //   synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE), // Sincroniza com o BD. Não deve ser usado em produção
     // }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      imports: [ConfigModule.forFeature(appConfig)],
+      inject: [appConfig.KEY],
+      useFactory: (appConfigurations: ConfigType<typeof appConfig>) => {
         return {
-          type: configService.get<'postgres'>('database.type'),
-          host: configService.get<string>('database.host'),
-          port: configService.get<number>('database.port'),
-          username: configService.get<string>('database.username'),
-          database: configService.get<string>('database.database'),
-          password: configService.get<string>('database.password'),
-          autoLoadEntities: configService.get<boolean>(
-            'database.autoLoadEntities',
-          ),
-          synchronize: configService.get<boolean>('database.synchronize'),
+          type: appConfigurations.database.type,
+          host: appConfigurations.database.host,
+          port: appConfigurations.database.port,
+          username: appConfigurations.database.username,
+          database: appConfigurations.database.database,
+          password: appConfigurations.database.password,
+          autoLoadEntities: appConfigurations.database.autoLoadEntities,
+          synchronize: appConfigurations.database.synchronize,
         };
       },
     }),
