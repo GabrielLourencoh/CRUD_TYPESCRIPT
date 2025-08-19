@@ -10,15 +10,16 @@ import jwtConfig from 'src/auth/config/jwt.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432, // porta padrao
-      username: 'postgres', // username padrao
-      database: 'meu_crud_recados', // database padrao
-      password: '240024', // senha do banco
-      autoLoadEntities: true, // Carrega entidades sem precisar especificá-las
-      synchronize: true, // Sincroniza com o BD. Não deve ser usado em produção
+      type: process.env.DATABASE_TYPE as 'postgres',
+      host: process.env.DATABASE_HOST,
+      port: parseInt(process.env.DATABASE_PORT ?? '5432', 10), // porta padrao
+      username: process.env.DATABASE_USERNAME, // username padrao
+      database: process.env.DATABASE_DATABASE, // database padrao
+      password: process.env.DATABASE_PASSWORD, // senha do banco
+      autoLoadEntities: Boolean(process.env.DATABASE_AUTOLOADENTITIES), // Carrega entidades sem precisar especificá-las
+      synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE), // Sincroniza com o BD. Não deve ser usado em produção
     }),
     RecadosModule,
     PessoasModule,
