@@ -10,7 +10,10 @@ import jwtConfig from 'src/auth/config/jwt.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      // envFilePath: '.env', // Caminho da variavel de ambiente
+      // ignoreEnvFile: true, // Ignora arquivos .env
+    }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'postgres',
       host: process.env.DATABASE_HOST,
