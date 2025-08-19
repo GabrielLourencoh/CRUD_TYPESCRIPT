@@ -7,26 +7,12 @@ import { PessoasModule } from 'src/pessoas/pessoas.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
-import * as Joi from '@hapi/joi';
-import appConfig from './app.config';
+import globalConfig from 'src/global-config/global.config';
+import { GlobalConfigModule } from 'src/global-config/global-config.module';
 
 @Module({
   imports: [
-    ConfigModule.forFeature(appConfig),
-    ConfigModule.forRoot({
-      // envFilePath: '.env', // Caminho da variavel de ambiente
-      // ignoreEnvFile: true, // Ignora arquivos .env
-      validationSchema: Joi.object({
-        DATABASE_TYPE: Joi.required(),
-        DATABASE_HOST: Joi.required(),
-        DATABASE_PORT: Joi.number().default(5432),
-        DATABASE_USERNAME: Joi.required(),
-        DATABASE_DATABASE: Joi.required(),
-        DATABASE_PASSWORD: Joi.required(),
-        DATABASE_AUTOLOADENTITIES: Joi.number().min(0).max(1).default(0),
-        DATABASE_SYNCHRONIZE: Joi.number().min(0).max(1).default(0),
-      }),
-    }),
+    ConfigModule.forFeature(globalConfig),
     // TypeOrmModule.forRoot({
     //   type: process.env.DATABASE_TYPE as 'postgres',
     //   host: process.env.DATABASE_HOST,
@@ -38,24 +24,25 @@ import appConfig from './app.config';
     //   synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE), // Sincroniza com o BD. Não deve ser usado em produção
     // }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule.forFeature(appConfig)],
-      inject: [appConfig.KEY],
-      useFactory: (appConfigurations: ConfigType<typeof appConfig>) => {
+      imports: [ConfigModule.forFeature(globalConfig)],
+      inject: [globalConfig.KEY],
+      useFactory: (globalConfigurations: ConfigType<typeof globalConfig>) => {
         return {
-          type: appConfigurations.database.type,
-          host: appConfigurations.database.host,
-          port: appConfigurations.database.port,
-          username: appConfigurations.database.username,
-          database: appConfigurations.database.database,
-          password: appConfigurations.database.password,
-          autoLoadEntities: appConfigurations.database.autoLoadEntities,
-          synchronize: appConfigurations.database.synchronize,
+          type: globalConfigurations.database.type,
+          host: globalConfigurations.database.host,
+          port: globalConfigurations.database.port,
+          username: globalConfigurations.database.username,
+          database: globalConfigurations.database.database,
+          password: globalConfigurations.database.password,
+          autoLoadEntities: globalConfigurations.database.autoLoadEntities,
+          synchronize: globalConfigurations.database.synchronize,
         };
       },
     }),
     RecadosModule,
     PessoasModule,
     AuthModule,
+    GlobalConfigModule,
     // Temporario o debaixo
     ConfigModule.forRoot({
       isGlobal: true,
