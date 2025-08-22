@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   CanActivate,
   ExecutionContext,
@@ -10,10 +11,15 @@ import { Request } from 'express';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { REQUEST_TOKEN_PAYLOAD_KEY } from '../auth.constants';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Pessoa } from 'src/pessoas/entities/pessoa.entity';
 
 @Injectable()
 export class AuthTokenGuard implements CanActivate {
   constructor(
+    @InjectRepository(Pessoa)
+    private readonly pessoaRepository: Repository<Pessoa>,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
@@ -28,13 +34,20 @@ export class AuthTokenGuard implements CanActivate {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const payload = await this.jwtService.verifyAsync(
         token,
         this.jwtConfiguration,
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const pessoa = await this.pessoaRepository.findOneBy({
+        id: payload.sub,
+        active: true,
+      });
+
+      if (!pessoa) {
+        throw new UnauthorizedException('Pessoa não autorizada!');
+      }
+
       request[REQUEST_TOKEN_PAYLOAD_KEY] = payload;
     } catch (error) {
       console.log(error);

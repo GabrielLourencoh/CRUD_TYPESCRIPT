@@ -1,7 +1,7 @@
 @baseUrl = http://127.0.0.1:3000
 # Pegando o accessToken diretamente. Serve apenas para sermos mais rapidos no ambiente de desenvolvimento
 @authToken = {{authenticate.response.body.accessToken}}
-@refreshToken = {{reAuthenticate.response.body.refreshToken}}
+@refreshToken = {{authenticate.response.body.refreshToken}}
 
 # RECADOS
 ### Lista todos os recados
