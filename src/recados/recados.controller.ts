@@ -20,6 +20,9 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
+import { RoutePolicyGuard } from 'src/auth/guards/route-policy.guard';
+import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
+import { RoutePolicies } from 'src/auth/enum/route-policies.enum';
 // import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 //CRUD
@@ -36,6 +39,7 @@ import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
 // DTO -> Objeto simples -> No nest, serve tanto para validar dados / transformar dados
 
 // @UseInterceptors(AuthTokenInterceptor)
+@UseGuards(RoutePolicyGuard)
 @Controller('recados') // Decorator de controle
 export class RecadosController {
   constructor(private readonly recadosService: RecadosService) {}
@@ -43,6 +47,7 @@ export class RecadosController {
   // @HttpCode(201) com numero direto
   @HttpCode(HttpStatus.OK) // Retorna 200
   @Get('/') // Encontra todos os recados
+  @SetRoutePolicy(RoutePolicies.findAllRecados)
   async findAll(@Query() paginationDto: PaginationDto) {
     const recados = await this.recadosService.findAll(paginationDto);
     return recados;
