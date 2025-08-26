@@ -56,9 +56,10 @@ POST {{baseUrl}}/pessoas/
 Content-Type: application/json
 
 {
-    "email": "GabrielTeste2@gmail.com",
+    "email": "GabrielTeste3@gmail.com",
     "password": "112233",
-    "nome": "Gabriel Lourenco"
+    "nome": "Gabriel Lourenco",
+    "routePolicies": ["createRecado", "findOneRecado"]
 }
 
 ### Atualiza uma pessoa
@@ -72,7 +73,7 @@ Content-Type: application/json
 }
 
 ### Apaga uma pessoa 
-DELETE {{baseUrl}}/pessoas/11/
+DELETE {{baseUrl}}/pessoas/16/
 Authorization: Bearer {{authToken}}
 
 
@@ -83,7 +84,7 @@ POST {{baseUrl}}/auth/
 Content-Type: application/json
 
 {
-    "email": "GabrielTeste2@gmail.com",
+    "email": "GabrielTeste3@gmail.com",
     "password": "112233"
 }
 
