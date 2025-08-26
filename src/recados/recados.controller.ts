@@ -19,10 +19,7 @@ import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { TokenPayloadParam } from 'src/auth/params/token-payload.param';
 import { TokenPayloadDto } from 'src/auth/dto/token-payload.dto';
-import { SetRoutePolicy } from 'src/auth/decorators/set-route-policy.decorator';
-import { RoutePolicies } from 'src/auth/enum/route-policies.enum';
-import { AuthAndPolicyGuard } from 'src/auth/guards/auth-and-policy.guard';
-// import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
+import { AuthTokenGuard } from 'src/auth/guards/auth-token.guard';
 
 //CRUD
 // Create -> POST -> Criar um recado
@@ -57,8 +54,7 @@ export class RecadosController {
     return this.recadosService.findOne(id); // Usando o `` no lugar da '', podemos colocar variaveis na nossa msg
   }
 
-  @SetRoutePolicy(RoutePolicies.createRecado)
-  @UseGuards(AuthAndPolicyGuard)
+  @UseGuards(AuthTokenGuard)
   @Post()
   create(
     @Body() createRecadoDto: CreateRecadoDto,
@@ -68,8 +64,7 @@ export class RecadosController {
     return this.recadosService.create(createRecadoDto, tokenPayload);
   }
 
-  @SetRoutePolicy(RoutePolicies.updateRecado)
-  @UseGuards(AuthAndPolicyGuard)
+  @UseGuards(AuthTokenGuard)
   @Patch(':id')
   update(
     @Param('id') id: number,
@@ -80,8 +75,7 @@ export class RecadosController {
     return this.recadosService.update(id, updateRecadoDto, tokenPayload);
   }
 
-  @SetRoutePolicy(RoutePolicies.deleteRecado)
-  @UseGuards(AuthAndPolicyGuard)
+  @UseGuards(AuthTokenGuard)
   @Delete(':id')
   remove(
     @Param('id') id: number,

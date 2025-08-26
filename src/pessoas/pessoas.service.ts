@@ -31,7 +31,6 @@ export class PessoasService {
         nome: createPessoaDto.nome,
         passwordHash: passwordHash, // Aqui deve ser o hash da senha
         email: createPessoaDto.email,
-        routePolicies: createPessoaDto.routePolicies,
       };
 
       const novaPessoa = this.pessoaRepository.create(dadosPessoa);

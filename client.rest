@@ -24,7 +24,7 @@ Content-Type: application/json
 }
 ### Atualiza um recado
 
-PATCH {{baseUrl}}/recados/13/
+PATCH {{baseUrl}}/recados/14/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Apaga um recado 
-DELETE {{baseUrl}}/recados/13/
+DELETE {{baseUrl}}/recados/14/
 Authorization: Bearer {{authToken}}
 
 
@@ -48,7 +48,7 @@ Authorization: Bearer {{authToken}}
 
 ### Lista apenas uma Pessoa
 
-GET {{baseUrl}}/pessoas/11/
+GET {{baseUrl}}/pessoas/17/
 Authorization: Bearer {{authToken}}
 
 ### Cria uma PEssoa
@@ -58,13 +58,12 @@ Content-Type: application/json
 {
     "email": "GabrielTeste3@gmail.com",
     "password": "112233",
-    "nome": "Gabriel Lourenco",
-    "routePolicies": ["createRecado", "findOneRecado"]
+    "nome": "Gabriel Lourenco"
 }
 
 ### Atualiza uma pessoa
 
-PATCH {{baseUrl}}/pessoas/12/
+PATCH {{baseUrl}}/pessoas/17/
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -73,7 +72,7 @@ Content-Type: application/json
 }
 
 ### Apaga uma pessoa 
-DELETE {{baseUrl}}/pessoas/16/
+DELETE {{baseUrl}}/pessoas/17/
 Authorization: Bearer {{authToken}}
 
 
@@ -84,7 +83,7 @@ POST {{baseUrl}}/auth/
 Content-Type: application/json
 
 {
-    "email": "GabrielTeste3@gmail.com",
+    "email": "GabrielTeste2@gmail.com",
     "password": "112233"
 }
 
