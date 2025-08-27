@@ -9,6 +9,8 @@ import { ConfigModule, ConfigType } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
 import globalConfig from 'src/global-config/global.config';
 import { GlobalConfigModule } from 'src/global-config/global-config.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -38,6 +40,10 @@ import { GlobalConfigModule } from 'src/global-config/global-config.module';
           synchronize: globalConfigurations.database.synchronize,
         };
       },
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, '..', '..', 'pictures'),
+      serveRoot: '/pictures',
     }),
     RecadosModule,
     PessoasModule,
