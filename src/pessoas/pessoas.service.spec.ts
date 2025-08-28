@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Repository } from 'typeorm';
 import { PessoasService } from './pessoas.service';
 import { Pessoa } from './entities/pessoa.entity';
@@ -52,21 +54,39 @@ describe('PessoasService', () => {
         password: '123456',
       };
       const passwordHash = 'HASHDESENHA';
+      const novaPessoa = {
+        id: 1,
+        nome: createPessoaDto.nome,
+        email: createPessoaDto.email,
+        passwordHash,
+      };
 
+      // Como o valor retornado por hashingService.hash é necessário, vamos simular esse valor.
       jest.spyOn(hashingService, 'hash').mockResolvedValue(passwordHash);
+      // Como a pessoa retorna por pessoaRepository.create é necessária em pessoaRepository.save, vamos simular esse valor.
+      jest.spyOn(pessoaRepository, 'create').mockReturnValue(novaPessoa as any);
 
-      // Act
-      await pessoaService.create(createPessoaDto);
+      // Act -> Ação
+      const result = await pessoaService.create(createPessoaDto);
 
       // Assert
+      // O método hashingService.hash foi chamado com createPessoaDto.password?
       expect(hashingService.hash).toHaveBeenCalledWith(
         createPessoaDto.password,
       );
+
+      // O método pessoaRepository.create foi chamado com os dados da nova pessoa com hash de senha gerado por hashingService.hash?
       expect(pessoaRepository.create).toHaveBeenCalledWith({
         nome: createPessoaDto.nome,
-        passwordHash: passwordHash,
+        passwordHash,
         email: createPessoaDto.email,
       });
+
+      // O método pessoaRepository.create foi chamado com os dados da nova pessoa gerada por pessoaRepository.create?
+      expect(pessoaRepository.save).toHaveBeenCalledWith(novaPessoa);
+
+      // O resultado do método pessoaService.create retornou a nova pessoa criada?
+      expect(result).toEqual(novaPessoa);
     });
   });
 });
