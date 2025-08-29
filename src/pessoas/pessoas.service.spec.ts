@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Repository } from 'typeorm';
@@ -7,7 +8,11 @@ import { HashingService } from 'src/auth/hashing/hashing.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreatePessoaDto } from './dto/create-pessoa.dto';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('PessoasService', () => {
   let pessoasService: PessoasService;
@@ -25,6 +30,7 @@ describe('PessoasService', () => {
             create: jest.fn(),
             findOneBy: jest.fn(),
             find: jest.fn(),
+            preload: jest.fn(),
           },
         },
         {
@@ -160,6 +166,76 @@ describe('PessoasService', () => {
           id: 'desc',
         },
       });
+    });
+  });
+
+  describe('update', () => {
+    it('deve atualizar uma pessoa se for autorizado', async () => {
+      // Arrange
+      const pessoaId = 1;
+      const updatePessoaDto = { nome: 'Gabriele', password: '654321' };
+      const tokenPayload = { sub: pessoaId } as any;
+      const passwordHash = 'HASHDESENHA';
+      const updatedPessoa = { id: pessoaId, nome: 'Gabriele', passwordHash };
+
+      jest.spyOn(hashingService, 'hash').mockResolvedValue(passwordHash);
+      jest
+        .spyOn(pessoaRepository, 'preload')
+        .mockResolvedValue(updatedPessoa as any);
+      jest
+        .spyOn(pessoaRepository, 'save')
+        .mockResolvedValue(updatedPessoa as any);
+
+      // Act
+      const result = await pessoasService.update(
+        pessoaId,
+        updatePessoaDto,
+        tokenPayload,
+      );
+      // Assert
+      expect(hashingService.hash).toHaveBeenCalledWith(
+        updatePessoaDto.password,
+      );
+      expect(pessoaRepository.preload).toHaveBeenCalledWith({
+        id: pessoaId,
+        nome: updatePessoaDto.nome,
+        passwordHash,
+      });
+      expect(pessoaRepository.save).toHaveBeenCalledWith(updatedPessoa);
+      expect(result).toEqual(updatedPessoa);
+    });
+
+    it('deve lançar ForbiddenException se usuário não autorizado', async () => {
+      // Arrange
+      const pessoaId = 1;
+      const tokenPayload = { sub: 2 } as any;
+      const updatePessoaDto = { nome: 'Gabriele' };
+      const existingPessoa = { id: pessoaId, nome: 'Gabriele' };
+
+      // Simula que preload retornou undefined
+      jest
+        .spyOn(pessoaRepository, 'preload')
+        .mockResolvedValue(existingPessoa as any);
+
+      // Act e Assert
+      await expect(
+        pessoasService.update(pessoaId, updatePessoaDto, tokenPayload),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('deve lançar NotFoundException se a pessoa não existe', async () => {
+      // Arrange
+      const pessoaId = 1;
+      const tokenPayload = { sub: pessoaId } as any;
+      const updatePessoaDto = { nome: 'Gabriele' };
+
+      // Simula que preload retornou undefined
+      jest.spyOn(pessoaRepository, 'preload').mockResolvedValue(undefined);
+
+      // Act e Assert
+      await expect(
+        pessoasService.update(pessoaId, updatePessoaDto, tokenPayload),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });
