@@ -99,5 +99,15 @@ describe('PessoasService', () => {
         ConflictException,
       );
     });
+
+    it('deve lançar Error quando não for criado corretamente', async () => {
+      jest
+        .spyOn(pessoaRepository, 'save')
+        .mockRejectedValue(new Error('Erro genérico'));
+
+      await expect(pessoaService.create({} as any)).rejects.toThrow(
+        new Error('Erro genérico'),
+      );
+    });
   });
 });
