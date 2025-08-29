@@ -7,7 +7,7 @@ import { HashingService } from 'src/auth/hashing/hashing.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreatePessoaDto } from './dto/create-pessoa.dto';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 describe('PessoasService', () => {
   let pessoaService: PessoasService;
@@ -23,6 +23,7 @@ describe('PessoasService', () => {
           useValue: {
             save: jest.fn(),
             create: jest.fn(),
+            findOneBy: jest.fn(),
           },
         },
         {
@@ -42,7 +43,7 @@ describe('PessoasService', () => {
   });
 
   // Caso - Teste
-  it('pessoa Service deve estar definido', () => {
+  it('pessoaService deve estar definido', () => {
     expect(pessoaService).toBeDefined();
   });
 
@@ -108,6 +109,30 @@ describe('PessoasService', () => {
       await expect(pessoaService.create({} as any)).rejects.toThrow(
         new Error('Erro genérico'),
       );
+    });
+  });
+
+  describe('findOne', () => {
+    it('deve retornar uma pessoa se a pessoa for encontrada', async () => {
+      const pessoaId = 1;
+      const pessoaEncontrada = {
+        id: pessoaId,
+        nome: 'Gabriel',
+        email: 'Gabriel@email.com',
+        passwordHash: '123456',
+      };
+
+      jest
+        .spyOn(pessoaRepository, 'findOneBy')
+        .mockResolvedValue(pessoaEncontrada as any);
+
+      const result = await pessoaService.findOne(pessoaId);
+
+      expect(result).toEqual(pessoaEncontrada);
+    });
+
+    it('deve retornar um NotFoundException se a pessoa não for encontrada', async () => {
+      await expect(pessoaService.findOne(1)).rejects.toThrow(NotFoundException);
     });
   });
 });
