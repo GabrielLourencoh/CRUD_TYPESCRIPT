@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Test, TestingModule } from '@nestjs/testing';
@@ -17,8 +19,35 @@ import jwtConfig from 'src/auth/config/jwt.config';
 import appConfig from 'src/app/config/app.config';
 import { CreatePessoaDto } from 'src/pessoas/dto/create-pessoa.dto';
 
+const login = async (
+  app: INestApplication,
+  email: string,
+  password: string,
+) => {
+  const response = await request(app.getHttpServer())
+    .post('/auth')
+    .send({ email, password });
+
+  return response.body.accessToken;
+};
+
+const createUserAndLogin = async (app: INestApplication) => {
+  const nome = 'Any User';
+  const email = 'anyuser@email.com';
+  const password = '123456';
+
+  await request(app.getHttpServer()).post('/pessoas').send({
+    nome,
+    email,
+    password,
+  });
+
+  return login(app, email, password);
+};
+
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
+  let authToken: string;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -56,6 +85,8 @@ describe('AppController (e2e)', () => {
     appConfig(app);
 
     await app.init();
+
+    authToken = await createUserAndLogin(app);
   });
 
   afterEach(async () => {
@@ -88,8 +119,8 @@ describe('AppController (e2e)', () => {
 
     it('deve gerar um erro de e-mail já existe', async () => {
       const createPessoaDto: CreatePessoaDto = {
-        email: 'luiz@email.com',
-        nome: 'Luiz',
+        email: 'gabriel@email.com',
+        nome: 'Gabriel',
         password: '123456',
       };
 
@@ -108,8 +139,8 @@ describe('AppController (e2e)', () => {
 
     it('deve gerar um erro de senha curta', async () => {
       const createPessoaDto: CreatePessoaDto = {
-        email: 'luiz@email.com',
-        nome: 'Luiz',
+        email: 'gabriel@email.com',
+        nome: 'Gabriel',
         password: '123', // Este campo é inválido
       };
 
@@ -124,6 +155,62 @@ describe('AppController (e2e)', () => {
       expect(response.body.message).toContain(
         'password must be longer than or equal to 5 characters',
       );
+    });
+  });
+
+  describe('/pessoas/:id (GET)', () => {
+    it('deve retornar Unauthorized quando usuário não está logado', async () => {
+      const pessoaResponse = await request(app.getHttpServer())
+        .post('/pessoas')
+        .send({
+          email: 'gabriel@email.com',
+          password: '123456',
+          nome: 'Gabriel',
+        })
+        .expect(HttpStatus.CREATED);
+
+      const response = await request(app.getHttpServer())
+        .get('/pessoas/' + pessoaResponse.body.id)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      expect(response.body).toEqual({
+        message: 'Não logado!',
+        error: 'Unauthorized',
+        statusCode: 401,
+      });
+    });
+
+    it('deve retornar a Pessoa quando usuário está logado', async () => {
+      const createPessoaDto: CreatePessoaDto = {
+        email: 'gabriel@email.com',
+        nome: 'Gabriel',
+        password: '123456',
+      };
+
+      const pessoaResponse = await request(app.getHttpServer())
+        .post('/pessoas')
+        .send({
+          email: createPessoaDto.email,
+          password: createPessoaDto.password,
+          nome: createPessoaDto.nome,
+        })
+        .expect(HttpStatus.CREATED);
+
+      const response = await request(app.getHttpServer())
+        .get('/pessoas/' + pessoaResponse.body.id)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(HttpStatus.OK);
+
+      expect(response.body).toEqual({
+        email: createPessoaDto.email,
+        passwordHash: expect.any(String),
+        nome: createPessoaDto.nome,
+        active: true,
+        createdAt: expect.any(String),
+        updateAt: expect.any(String),
+        picture: '',
+        id: expect.any(Number),
+      });
     });
   });
 });
