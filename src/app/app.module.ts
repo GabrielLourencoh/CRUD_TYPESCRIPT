@@ -15,16 +15,6 @@ import * as path from 'path';
 @Module({
   imports: [
     ConfigModule.forFeature(globalConfig),
-    // TypeOrmModule.forRoot({
-    //   type: process.env.DATABASE_TYPE as 'postgres',
-    //   host: process.env.DATABASE_HOST,
-    //   port: parseInt(process.env.DATABASE_PORT ?? '5432', 10), // porta padrao
-    //   username: process.env.DATABASE_USERNAME, // username padrao
-    //   database: process.env.DATABASE_DATABASE, // database padrao
-    //   password: process.env.DATABASE_PASSWORD, // senha do banco
-    //   autoLoadEntities: Boolean(process.env.DATABASE_AUTOLOADENTITIES), // Carrega entidades sem precisar especificá-las
-    //   synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE), // Sincroniza com o BD. Não deve ser usado em produção
-    // }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(globalConfig)],
       inject: [globalConfig.KEY],
