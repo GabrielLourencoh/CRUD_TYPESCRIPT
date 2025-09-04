@@ -219,20 +219,20 @@ describe('AppController (e2e)', () => {
       const createResponse = await request(app.getHttpServer())
         .post('/pessoas')
         .send({
-          email: 'luiz@email.com',
-          nome: 'Luiz',
+          email: 'gabriel@email.com',
+          nome: 'Gabriel',
           password: '123456',
         })
         .expect(HttpStatus.CREATED);
 
       const personId = createResponse.body.id;
 
-      const authToken = await login(app, 'luiz@email.com', '123456');
+      const authToken = await login(app, 'gabriel@email.com', '123456');
 
       const updateResponse = await request(app.getHttpServer())
         .patch(`/pessoas/${personId}`)
         .send({
-          nome: 'Luiz Atualizado',
+          nome: 'Gabriel Atualizado',
         })
         .set('Authorization', `Bearer ${authToken}`)
         .expect(HttpStatus.OK);
@@ -240,7 +240,7 @@ describe('AppController (e2e)', () => {
       expect(updateResponse.body).toEqual(
         expect.objectContaining({
           id: personId,
-          nome: 'Luiz Atualizado',
+          nome: 'Gabriel Atualizado',
         }),
       );
     });
@@ -261,13 +261,13 @@ describe('AppController (e2e)', () => {
       const createResponse = await request(app.getHttpServer())
         .post('/pessoas')
         .send({
-          email: 'luiz@email.com',
-          nome: 'Luiz',
+          email: 'gabriel@email.com',
+          nome: 'Gabriel',
           password: '123456',
         })
         .expect(HttpStatus.CREATED);
 
-      const authToken = await login(app, 'luiz@email.com', '123456');
+      const authToken = await login(app, 'gabriel@email.com', '123456');
 
       const personId = createResponse.body.id;
 
@@ -276,7 +276,7 @@ describe('AppController (e2e)', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(HttpStatus.OK);
 
-      expect(response.body.email).toBe('luiz@email.com');
+      expect(response.body.email).toBe('gabriel@email.com');
     });
 
     it('deve retornar erro para pessoa não encontrada', async () => {
