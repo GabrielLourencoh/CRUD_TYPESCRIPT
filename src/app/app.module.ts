@@ -11,9 +11,18 @@ import globalConfig from 'src/global-config/global.config';
 import { GlobalConfigModule } from 'src/global-config/global-config.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // time to live em ms
+        limit: 10, // máximo de requests durante o ttl
+        blockDuration: 5000, // tempo de bloqueio
+      },
+    ]),
     ConfigModule.forFeature(globalConfig),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forFeature(globalConfig)],
@@ -49,10 +58,10 @@ import * as path from 'path';
   controllers: [AppController],
   providers: [
     AppService,
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: MyExceptionFilter,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
   exports: [],
 })
